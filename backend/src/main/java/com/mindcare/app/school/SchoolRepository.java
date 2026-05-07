@@ -1,0 +1,10 @@
+package com.mindcare.app.school;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface SchoolRepository extends JpaRepository<SchoolEntity, Long> {
+
+    Optional<SchoolEntity> findBySchoolCode(String schoolCode);
+}
