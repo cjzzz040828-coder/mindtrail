@@ -1,224 +1,224 @@
-# 心理健康 App MVP
+# MindTrail 心理健康 App
 
-这是一个基于现有原型图继续落地的试点型 MVP 工程骨架，目标是逐步做出一套可演示、可扩展的：
+面向中国大陆中学未成年人的心理健康筛查辅助 + AI 康复训练陪伴 + 家校摘要预警 MVP 试点工程。
 
-- 学生端 App
-- 家长端
-- 老师端
-- 后端安全与业务中台
+不做医学诊断，不保存原始视频，高风险/危机内容触发学校心理老师人工复核。
 
-## 当前状态
+## 项目结构
 
-当前仓库已经包含：
-
-- 需求与边界文档：[PLAN.md](D:\桌面\心理健康\PLAN.md)
-- 项目统一上下文：[PROJECT_CONTEXT.md](D:\桌面\心理健康\PROJECT_CONTEXT.md)
-- 方案图对齐说明：[docs/SCHEME_ALIGNMENT_FROM_IMAGE.md](D:\桌面\心理健康\docs\SCHEME_ALIGNMENT_FROM_IMAGE.md)
-- 多组原型图：[`pictures/`](D:\桌面\心理健康\pictures)
-- 第一版工程骨架：
-  - [backend](D:\桌面\心理健康\backend)
-  - [frontend_vue](D:\桌面\心理健康\frontend_vue)
-  - [app_flutter](D:\桌面\心理健康\app_flutter)
-  - [app_react_native](D:\桌面\心理健康\app_react_native)
-  - [docs/MVP_BACKLOG.md](D:\桌面\心理健康\docs\MVP_BACKLOG.md)
-- 开发路线图：
-  - [docs/DEVELOPMENT_PLAN.md](D:\桌面\心理健康\docs\DEVELOPMENT_PLAN.md)
-- 已串通的学生端最小闭环：
-  - 登录
-  - 同意与授权
-  - 筛查模板与答题
-  - 筛查结果
-  - 今日训练计划
-  - 学生首页
-  - AI 陪练前端 Mock
-
-## 目录结构
-
-```text
+```
 .
-├─ backend/         Spring Boot Mock API 与后续业务后端
-├─ frontend_vue/    Vue 3 + Vite H5/Web MVP
-├─ app_flutter/     Flutter App 入口骨架
-├─ app_react_native/ React Native + Expo 原生 App 新路线
-├─ docs/            开发清单与补充文档
-├─ pictures/        原型图与联系图
-├─ PLAN.md
-└─ PROJECT_CONTEXT.md
+├── backend/              Spring Boot 3.3 + JPA + Flyway 后端
+├── frontend_vue/         Vue 3 + Vite + TypeScript Web MVP
+├── app_react_native/     React Native + Expo「林间聊愈室」
+├── app_flutter/          Flutter App（备选路线）
+├── docs/                 开发计划与积压清单
+├── scripts/              一键启动/停止脚本
+├── PLAN.md               技术方案
+└── PROJECT_CONTEXT.md    项目决策与边界
 ```
 
-## 技术决策
+## 技术栈
 
-- 后端：`Spring Boot 3.3 + Java 17 + Maven`
-- 数据库：默认 `H2` 本地文件库，联调/部署推荐 `MySQL 8`
-- 当前前端优先路线：`Vue 3 + Vite + TypeScript`
-- 当前 App 新主路线：`React Native + Expo + TypeScript`
-- App 备选路线：`Flutter` 骨架已创建
-- 当前本机可直接运行后端
-- 当前本机可构建 Vue 前端
-- 当前本机已创建并通过类型检查的 React Native 工程
-- 当前本机尚未安装 Flutter SDK，因此 Flutter 代码暂未本地编译验证
+| 层 | 技术 | 说明 |
+|---|---|---|
+| 后端 | Java 17 + Spring Boot 3.3 + Spring Data JPA + Flyway | H2 本地开发，MySQL 8 生产 |
+| Web 前端 | Vue 3 + Vite + TypeScript + lucide-vue-next | 单文件原型，无路由库 |
+| 移动端 | React Native 0.81 + Expo 54 + TypeScript | 独立「聊愈」方向，AsyncStorage 本地持久化 |
+| 移动端备选 | Flutter 3.3+ | 与后端 API 对接的学生端骨架 |
 
-说明：
+## 后端
 
-- 方案文档原先倾向 `Java 21`，但当前机器可直接稳定运行的是 `Java 17`。
-- Spring Boot 3.3 对 Java 17 支持良好，所以第一版骨架先按 `Java 17` 落地，后续升级到 `Java 21` 成本很低。
-- Vue 版本用于更快做 H5/Web MVP，也方便后续用 `uni-app` 或 `Capacitor` 继续打包成 App。
-- React Native 版本已改为“林间聊愈室”方向，不再默认展示旧的学生/家长/老师平台流程。
-- React Native 版本已根据原型视频提取页面结构，当前包含草地聊愈主场景、碎念动态流、日记情绪曲线、困扰橱窗、星空记忆、趣聊房间和 React Navigation 原生底部 Tab。
-- React Native 版本已加入本地 PNG 序列帧动物动画管线，当前 `assets/sprites/` 内有花花狸、森森鹿、咕咕熊的 8 帧待机动作，并补充了草地装饰、漂浮情绪泡、动态流反应、星云和趣聊房间雪点等细节。
-- React Native 版本已补本地功能闭环：碎念可发布并持久化、趣聊房间可发送并生成伙伴回复、困扰橱窗可写入日记，当前数据仍保存在手机本地，尚未接正式账号、后端和真实 AI 服务。
-- 已按原型视频修正「聊愈」入口：草地首页点击大圆形「聊愈」会打开独立沉浸式趣聊房间，返回后回到首页，不再误跳到「记忆」页。
-- 后端已经接入 `Spring Data JPA + Flyway`，默认用 H2 免安装数据库；如果要接正式 MySQL，可用 `local-mysql` profile。
+### 启动
 
-## 后端启动
-
-在项目根目录执行：
-
-```powershell
+```bash
 cd backend
 mvn spring-boot:run
 ```
 
-启动后可访问：
+默认使用 H2 内嵌数据库，数据存放在 `backend/data/`。
 
-- `GET http://localhost:8080/api/v1/health`
-- `GET http://localhost:8080/api/v1/bootstrap`
-- `POST http://localhost:8080/api/v1/auth/student/login`
-- `POST http://localhost:8080/api/v1/auth/guardian/bind`
-- `GET http://localhost:8080/api/v1/consents/status?studentId=S2024001`
-- `POST http://localhost:8080/api/v1/consents/submit`
-- `GET http://localhost:8080/api/v1/screenings/template`
-- `POST http://localhost:8080/api/v1/screenings/submit`
-- `GET http://localhost:8080/api/v1/trainings/today`
-- `POST http://localhost:8080/api/v1/trainings/tasks/status`
-- `GET http://localhost:8080/api/v1/guardian/summary?studentId=S2024001`
-- `POST http://localhost:8080/api/v1/ai-coach/messages`
-- `POST http://localhost:8080/api/v1/wellbeing/observations/analyze`
-- `GET http://localhost:8080/api/v1/alerts/teacher/demo`
-- `POST http://localhost:8080/api/v1/alerts/{alertId}/status`
+连接 MySQL 8：
 
-默认启动会在 `backend/data/` 下创建本地 H2 数据库文件，适合开发演示。
-
-如果要连接 MySQL 8，先创建数据库：
-
-```sql
-create database mindcare character set utf8mb4 collate utf8mb4_unicode_ci;
-```
-
-然后按需修改 [application.yml](D:\桌面\心理健康\backend\src\main\resources\application.yml) 里的账号密码，并使用：
-
-```powershell
+```bash
+# 先创建数据库
+mysql -e "CREATE DATABASE mindcare CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+# 启动
 cd backend
 mvn spring-boot:run -Dspring-boot.run.profiles=local-mysql
 ```
 
-## 一键启动
+### 业务模块
 
-如果你是在 Windows 本机开发，当前推荐直接使用根目录脚本：
+#### 认证（Auth）
 
-```powershell
+学生登录通过学校编码 + 学号 + 姓名自动创建或更新记录，返回会话令牌。家长绑定为存根接口。
+
+| 端点 | 说明 |
+|---|---|
+| `POST /api/v1/auth/student/login` | 学生登录/注册，自动建校、班、生 |
+| `POST /api/v1/auth/guardian/bind` | 家长绑定邀请码（stub） |
+
+#### 授权管理（Consent）
+
+四级授权：监护人同意、学生知情同意、摄像头训练授权、个人形象用于数字人。前三项为必选，头像授权可选。支持版本管理和撤回状态。
+
+| 端点 | 说明 |
+|---|---|
+| `GET /api/v1/consents/status?studentId=` | 查询授权状态 |
+| `POST /api/v1/consents/submit` | 提交授权记录 |
+
+#### 心理筛查（Screening）
+
+动态问卷模板，3 道关于睡眠、压力、社交意愿的题目。根据压力得分计算风险等级：`>= 8` 高风险，`>= 5` 中风险，其余低风险。高风险自动创建预警单。
+
+| 端点 | 说明 |
+|---|---|
+| `GET /api/v1/screenings/template` | 获取筛查问卷模板 |
+| `POST /api/v1/screenings/submit` | 提交筛查结果，返回风险等级和训练建议 |
+
+#### 训练计划（Training）
+
+每日自动创建训练计划，含三项默认任务：呼吸放松（3 分钟）、情绪日记（1 次）、正念专注（5 分钟）。支持任务状态更新和完成率统计。
+
+| 端点 | 说明 |
+|---|---|
+| `GET /api/v1/trainings/today?studentId=` | 获取今日训练计划 |
+| `POST /api/v1/trainings/tasks/status` | 更新任务完成状态 |
+
+#### AI 陪练（AI Coach）
+
+基于关键词匹配的风险检测。危机词（自杀、自伤等）触发高风险预警并自动创建人工复核单；痛苦词（崩溃、绝望等）触发中风险提示。回复模板按风险等级区分。
+
+| 端点 | 说明 |
+|---|---|
+| `POST /api/v1/ai-coach/messages` | 发送消息，返回 AI 回复和风险判定 |
+
+#### 状态观察（Wellbeing）
+
+接收行为指标码（注意力分散、低能量、紧张等），自动生成表情指标、身心状态建议、行为建议、音乐建议、饮食建议和数字人台词。支持历史记录查询。
+
+| 端点 | 说明 |
+|---|---|
+| `POST /api/v1/wellbeing/observations/analyze` | 分析行为指标，生成状态报告 |
+| `GET /api/v1/wellbeing/observations/history?studentId=&limit=` | 查询观察历史 |
+
+#### 预警复核（Alert）
+
+高风险筛查或 AI 危机检测自动创建预警单，学校心理老师查看摘要、风险原因、建议动作，标记处理状态。附带训练快照、跟进提示和操作时间线。
+
+| 端点 | 说明 |
+|---|---|
+| `GET /api/v1/alerts/teacher/demo?highlightAlertId=` | 获取预警列表和高亮详情 |
+| `POST /api/v1/alerts/{alertId}/status` | 更新预警处理状态 |
+
+#### 家长摘要（Guardian）
+
+聚合筛查风险等级、训练完成率、最新观察记录，生成情绪标签、趋势柱状图和上下文提醒。不展示完整聊天、隐私日记和原始视频。
+
+| 端点 | 说明 |
+|---|---|
+| `GET /api/v1/guardian/summary?studentId=` | 获取家长周报摘要 |
+
+#### 审计日志（Audit）
+
+内部服务，记录所有预警创建、状态更新、训练打卡、观察分析、AI 对话事件。无独立接口。
+
+### 数据库表
+
+11 张表，Flyway 自动迁移：
+
+```
+schools ──> school_classes ──> students
+                                  ├── consent_records
+                                  ├── screening_submissions
+                                  ├── training_plans ──> training_tasks
+                                  ├── training_observation_sessions ──> training_observation_features
+                                  ├── alert_cases
+                                  └── ai_coach_sessions ──> ai_coach_events
+audit_logs（独立，通过 targetType + targetId 关联）
+```
+
+## Web 前端（Vue）
+
+```bash
+cd frontend_vue
+npm install
+npm run dev    # 访问 http://localhost:5173
+```
+
+Vite 开发模式自动代理 `/api` 到后端 `http://127.0.0.1:8080`。桌面端以手机壳模拟框展示，430px 以下自动全屏。
+
+三角色通过标签切换，学生端含 9 个子视图：
+
+| 视图 | 功能 |
+|---|---|
+| 登录 | 学校编码 + 学号 + 姓名 |
+| 授权 | 四项开关式授权 |
+| 筛查引导 | 问卷说明与免责声明 |
+| 筛查答题 | 逐题作答 + 进度条 |
+| 筛查结果 | 风险等级、训练建议、安全提示 |
+| 训练计划 | 今日任务清单，可勾选完成 |
+| 首页 | 三只森林伙伴角色卡片、快捷入口、今日数据 |
+| AI 陪练 | 聊天界面，危机检测时刷新家长和老师数据 |
+| 数字人/思维工具 | 三个引导场景（舒压呼吸、专注回正、能量唤醒），可选摄像头人脸检测辅助观察 |
+
+家长端：情绪稳定性、训练完成率、提醒列表、趋势图、最新观察摘要。
+
+老师端：预警列表（颜色标记风险等级）、高亮详情（建议动作、训练快照、跟进提示、操作时间线）、状态更新和备注。
+
+## React Native（林间聊愈室）
+
+独立的聊愈方向产品，与后端 API 无关，完全离线本地运行。
+
+```bash
+# Windows 一键启动
 .\start-local.cmd
+
+# 手动启动
+cd app_react_native
+npm install
+npx expo start --web
 ```
 
-脚本会自动完成：
+四个底部 Tab：
 
-- 进入 `app_react_native`
-- 以离线模式启动 React Native / Expo Web 版本“林间聊愈室”
-- 使用 `http://localhost:8081` 打开本机预览页面
-- 窗口保持打开时 App 预览服务持续运行
+| Tab | 功能 |
+|---|---|
+| 聊愈 | 草地主场景，三只动画伙伴（花花狸/森森鹿/咕咕熊），脉冲式聊愈按钮进入聊天室 |
+| 碎念 | 碎念动态流，可发布和查看帖子，带点赞和评论 |
+| 日记 | 每周情绪柱状图、困扰识别（魔法门隐喻）、阶段目标追踪 |
+| 记忆 | 星空夜景、语音朗读问候、保存日记条目 |
 
-补充说明：
+三只伙伴性格各异，分别对应吐槽、温柔陪伴、能量补充。聊天室根据关键词和伙伴性格生成本地模拟回复。所有数据通过 AsyncStorage 本地持久化。
 
-- 脚本会关闭自动拉起浏览器，避免部分 Windows 环境下的启动失败。
-- 首次打开如果还是空白页，等 Metro 完成 bundling 后手动刷新一次即可。
+含 PNG 序列帧动画（8 帧待机动作）、浮动情绪气泡、雪花、星光闪烁等视觉效果。
 
-停止服务可执行：
+## Flutter（备选）
 
-```powershell
-.\stop-local.cmd
-```
-
-## Vue 前端启动
-
-当前推荐先用 Vue 版本推进 MVP：
-
-```powershell
-cd frontend_vue
-npm install --cache .npm-cache
-npm run dev
-```
-
-默认前端地址：
-
-```text
-http://localhost:5173
-```
-
-当前开发模式默认通过 Vite 代理转发 `/api` 到本机后端 `http://127.0.0.1:8080`，因此：
-
-- 同一台电脑访问时，不需要额外配置前端 API 地址
-- 局域网里用手机或其他电脑访问前端时，也不需要把前端改成请求它自己的 `localhost`
-
-如果你的后端不是本机 `8080`，再创建 `.env.local`：
-
-```text
-VITE_API_BASE_URL=http://你的后端地址:8080
-```
-
-构建检查：
-
-```powershell
-cd frontend_vue
-npm run build
-```
-
-## Flutter 启动
-
-Flutter 目录保留为备选 App 路线，当前目录已提供标准 Flutter 入口文件：
-
-- [pubspec.yaml](D:\桌面\心理健康\app_flutter\pubspec.yaml)
-- [main.dart](D:\桌面\心理健康\app_flutter\lib\main.dart)
-
-本机安装 Flutter SDK 后可尝试：
-
-```powershell
+```bash
 cd app_flutter
 flutter pub get
 flutter run
 ```
 
-如果你是在 Android 模拟器里跑，建议显式指定后端地址：
+实现学生端最小闭环：登录 → 授权 → 筛查 → 结果 → 训练计划 → 首页。家长和老师端为占位页面。与后端 API 对接，状态管理使用原生 setState。
+
+## 一键启动
 
 ```powershell
-flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8080
+# 启动 React Native Web 预览
+.\start-mobile.cmd
+
+# 停止
+.\stop-local.cmd
 ```
 
-如果你是在 Windows 桌面端或 Chrome 本机调试，通常可以直接使用默认的：
+## 下一步
 
-```text
-http://localhost:8080
-```
-
-## 下一步推荐
-
-建议按下面顺序继续做：
-
-1. 补后端接口测试和基础鉴权
-2. 完善账号、授权、筛查、训练、预警的真实业务规则
-3. 用 Vue 继续细化学生端、家长端、老师端页面
-4. 再接家长端和老师端
-5. 继续完善 AI 网关与数字人网关
-
-## 近期重点文件
-
-- [backend/src/main/java/com/mindcare/app/MentalHealthApplication.java](D:\桌面\心理健康\backend\src\main\java\com\mindcare\app\MentalHealthApplication.java)
-- [backend/src/main/java/com/mindcare/app/bootstrap/BootstrapController.java](D:\桌面\心理健康\backend\src\main\java\com\mindcare\app\bootstrap\BootstrapController.java)
-- [backend/src/main/java/com/mindcare/app/auth/AuthController.java](D:\桌面\心理健康\backend\src\main\java\com\mindcare\app\auth\AuthController.java)
-- [backend/src/main/java/com/mindcare/app/consent/ConsentController.java](D:\桌面\心理健康\backend\src\main\java\com\mindcare\app\consent\ConsentController.java)
-- [backend/src/main/java/com/mindcare/app/screening/ScreeningController.java](D:\桌面\心理健康\backend\src\main\java\com\mindcare\app\screening\ScreeningController.java)
-- [backend/src/main/java/com/mindcare/app/training/TrainingController.java](D:\桌面\心理健康\backend\src\main\java\com\mindcare\app\training\TrainingController.java)
-- [backend/src/main/java/com/mindcare/app/alert/AlertController.java](D:\桌面\心理健康\backend\src\main\java\com\mindcare\app\alert\AlertController.java)
-- [frontend_vue/src/App.vue](D:\桌面\心理健康\frontend_vue\src\App.vue)
-- [frontend_vue/src/api/client.ts](D:\桌面\心理健康\frontend_vue\src\api\client.ts)
-- [app_flutter/lib/main.dart](D:\桌面\心理健康\app_flutter\lib\main.dart)
-- [app_flutter/lib/src/pages/student_flow_pages.dart](D:\桌面\心理健康\app_flutter\lib\src\pages\student_flow_pages.dart)
+1. 后端鉴权从 Demo 令牌升级为 JWT
+2. 完善学校批量导入、邀请码绑定正式流程
+3. Vue 前端拆分组件，引入 vue-router 和 Pinia
+4. AI 陪练接入真实大模型安全网关
+5. 数字人能力接入供应商适配层
+6. 审计日志完善和数据导出机制
